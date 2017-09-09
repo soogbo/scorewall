@@ -5,4 +5,59 @@
     <welcome-file>index.html</welcome-file>
     <welcome-file>index.jsp</welcome-file>
   </welcome-file-list>
+  
+  <!-- 初始化参数，配置Spring核心配置文件位置 -->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>classpath:spring/applicationContext*.xml</param-value>
+	</context-param>
+	<!-- Spring的ApplicationContext的加载 -->
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+
+	<!-- 编码过滤器，以UTF8编码，解决POST乱码问题 -->
+	<filter>
+		<filter-name>encodingFilter</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>UTF-8</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>encodingFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+   <!-- 自定义通用解决get/post 编码过滤器，不解决返回参数编码 -->
+  <filter>
+    <filter-name>genericEncodingFilter</filter-name>
+    <filter-class>com.scorewall.util.GenericEncodingFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>genericEncodingFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
+	<!-- 配置SpringMVC -->
+	<servlet>
+		<servlet-name>scorewall</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<!-- 初始化参数，指定SpringMVC的配置文件路径，不再找WEB-INF下的默认配置 -->
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>classpath:spring/scorewall-servlet.xml</param-value>
+		</init-param>
+		<!-- 0：第一次被调用时创建； 1：Tomcat启动时就创建 -->
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>scorewall</servlet-name>
+		<!-- / 拦截除了JSP以外的所有路径 -->
+		<!-- /* 拦截所有路径 -->
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
+  
 </web-app>

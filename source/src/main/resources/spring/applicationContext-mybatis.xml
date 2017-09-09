@@ -1,0 +1,34 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd">
+
+<!-- spring 整合 mybatis，则需要注入 mybatis执行时的mapper对象-->
+<!-- 要获得mapper对象：1.需要加载连接信息生成sqlsessionFactory，
+				   2.注入mapper对象，因为mapper是接口形式不能直接注解或bean注入，需要配置接口注入 -->
+
+	<!-- 1.配置sqlSessionFactory：需要下面一些参数,name为SqlSessionFactoryBean的成员变量名 -->
+	
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<!-- 数据库的连接池信息 -->
+		<property name="dataSource" ref="dataSource"/>
+		<!-- mybatis的全局配置文件的地址 -->
+		<property name="configLocation" value="classpath:mybatis/mybatis-config.xml"/>
+		<!-- 配置Mapper文件的地址 -->
+		<property name="mapperLocations" value="classpath:mybatis/**/*Mapper.xml"/>
+		<!-- 配置别名扫描包 -->
+		<property name="typeAliasesPackage" value="com.scorewall.pojo"/>
+	</bean>
+ 
+	<!-- 2.mapper接口自动注入 ，设置sqlsessionfactory和接口名-->
+	<!-- 配置扫描mapper，实现mapper接口依赖注入  -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="com.scorewall.mapper"/>
+	</bean>
+
+</beans>	
+	

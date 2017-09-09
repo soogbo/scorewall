@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<!-- 注解驱动扫描 -->
+	<mvc:annotation-driven />
+	
+	<!-- 控制扫描-->
+	<context:component-scan base-package="com.scorewall.controller" />
+	
+	<!-- 静态资源访问交给web容器管理 -->
+	<mvc:default-servlet-handler />
+	
+	<!-- 视图解析器 -->
+	<bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="prefix" value="/WEB-INF/views/" />
+		<property name="suffix" value=".jsp" />
+	</bean>
+	
+	<!-- 注入自定义视图 -->
+<!-- 	<bean name="excelView" class="com.scorewall.view.UserExcelView" /> -->
+<!-- 	<bean name="pdfView" class="com.scorewall.view.UserPdfView" /> -->
+	
+	<!-- 配置BeanNameViewResolver视图解析器，会根据返回视图名称去bean中匹配对应视图 -->
+	<bean class="org.springframework.web.servlet.view.BeanNameViewResolver">
+		<!-- 多视图解析时，需要设置order属性，定义优先级，order默认是不启动的 -->
+		<property name="order" value="1"></property>
+	</bean>
+	
+	
+</beans>       
+        
+        
